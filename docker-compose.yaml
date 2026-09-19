@@ -8,7 +8,7 @@
 name: firecrawl
 
 x-common-service: &common-service
-  image: ghcr.io/firecrawl/firecrawl:v2.11.162
+  image: ghcr.io/firecrawl/firecrawl:2.10.19
   ulimits:
     nofile:
       soft: 65535
@@ -62,7 +62,7 @@ x-common-env: &common-env
 
 services:
   playwright-service:
-    image: ghcr.io/firecrawl/playwright-service:v2.11.162
+    image: ghcr.io/firecrawl/playwright-service:latest
     environment:
       PORT: 3000
       PROXY_SERVER: ${PROXY_SERVER}
@@ -162,7 +162,7 @@ services:
     restart: unless-stopped
 
   nuq-postgres:
-    image: ghcr.io/firecrawl/nuq-postgres:v2.11.162
+    image: ghcr.io/firecrawl/nuq-postgres:latest
     command: postgres -c cron.database_name=${POSTGRES_DB:-postgres}
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
