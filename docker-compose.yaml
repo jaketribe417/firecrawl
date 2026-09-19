@@ -93,6 +93,7 @@ services:
       <<: *common-env
       HOST: "0.0.0.0"
       PORT: ${INTERNAL_PORT:-3002}
+      SERVICE_FQDN_FIRECRAWL: "https://firecrawl.jhostly.com"
       EXTRACT_WORKER_PORT: ${EXTRACT_WORKER_PORT:-3004}
       WORKER_PORT: ${WORKER_PORT:-3005}
       NUQ_RABBITMQ_URL: amqp://${RABBITMQ_USER:-rabbitmq}:${RABBITMQ_PASSWORD:-rabbitmq}@rabbitmq:5672
@@ -128,7 +129,7 @@ services:
       - backend
     command: redis-server --bind 0.0.0.0
     volumes:
-      - redis-data:/data
+      - redis-data-fresh:/data
     logging:
       driver: "json-file"
       options:
@@ -191,6 +192,6 @@ networks:
     driver: bridge
 
 volumes:
-  redis-data:
+  redis-data-fresh:
   postgres-data:
   rabbitmq-data:
