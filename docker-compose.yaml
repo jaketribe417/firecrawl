@@ -25,8 +25,8 @@ x-common-service: &common-service
       compress: "true"
 
 x-common-env: &common-env
-  REDIS_URL: ${REDIS_URL:-redis://redis:6379}
-  REDIS_RATE_LIMIT_URL: ${REDIS_RATE_LIMIT_URL:-${REDIS_URL:-redis://redis:6379}}
+  REDIS_URL: ${REDIS_URL:-redis://firecrawl-redis-store-3v9lwrnsqoeykc1g4rbinpkp:6379}
+  REDIS_RATE_LIMIT_URL: ${REDIS_RATE_LIMIT_URL:-${REDIS_URL:-redis://firecrawl-redis-store-3v9lwrnsqoeykc1g4rbinpkp:6379}}
   PLAYWRIGHT_MICROSERVICE_URL: ${PLAYWRIGHT_MICROSERVICE_URL:-http://playwright-service:3000/scrape}
   POSTGRES_USER: ${POSTGRES_USER:-postgres}
   POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-postgres}"
@@ -100,7 +100,7 @@ services:
       HARNESS_STARTUP_TIMEOUT_MS: ${HARNESS_STARTUP_TIMEOUT_MS:-60000}
       ENV: local
     depends_on:
-      redis:
+      firecrawl-redis-store:
         condition: service_started
       playwright-service:
         condition: service_started
@@ -123,13 +123,17 @@ services:
       - "traefik.http.services.firecrawl.loadbalancer.server.port=3002"
     restart: unless-stopped
 
-  redis:
+  firecrawl-redis-store:
     image: redis:alpine
+    container_name: firecrawl-redis-store-3v9lwrnsqoeykc1g4rbinpkp
+    hostname: firecrawl-redis-store-3v9lwrnsqoeykc1g4rbinpkp
     networks:
-      - backend
+      backend:
+        aliases:
+          - firecrawl-redis-store-3v9lwrnsqoeykc1g4rbinpkp
     command: redis-server --bind 0.0.0.0
     volumes:
-      - redis-data-fresh:/data
+      - firecrawl-redis-data-3v9lwrnsqoeykc1g4rbinpkp:/data
     logging:
       driver: "json-file"
       options:
@@ -192,6 +196,6 @@ networks:
     driver: bridge
 
 volumes:
-  redis-data-fresh:
+  firecrawl-redis-data-3v9lwrnsqoeykc1g4rbinpkp:
   postgres-data:
   rabbitmq-data:
