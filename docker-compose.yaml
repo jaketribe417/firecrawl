@@ -115,15 +115,7 @@ services:
     ports:
       - "${PORT:-3002}:${INTERNAL_PORT:-3002}"
     command: node dist/src/harness.js --start-docker
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.firecrawl.rule=Host(`firecrawl.jhostly.com`)"
-      - "traefik.http.routers.firecrawl.entrypoints=websecure"
-      - "traefik.http.routers.firecrawl.tls=true"
-      - "traefik.http.routers.firecrawl.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.firecrawl.middlewares=firecrawl-auth"
-      - "traefik.http.middlewares.firecrawl-auth.basicauth.users=firecrawl%3A%24apr1%24efDAvw0z%24QSaXtGNpNu25N1jLHly5Z1"
-      - "traefik.http.services.firecrawl.loadbalancer.server.port=3002"
+
     restart: unless-stopped
 
   firecrawl-redis-store:
